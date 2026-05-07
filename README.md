@@ -1,12 +1,12 @@
-# ESP-NOW Animatronics Controller
+# ESP-NOW Wireless Servo Control
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: ESP32](https://img.shields.io/badge/Platform-ESP32-blue.svg)](https://www.espressif.com/en/products/socs/esp32)
 [![Framework: Arduino](https://img.shields.io/badge/Framework-Arduino-teal.svg)](https://www.arduino.cc/)
 
-Wireless animatronic prop controller system built on the **ESP32** using **ESP-NOW** — a connectionless, low-latency Wi-Fi protocol that requires no router, no pairing ceremony, and reaches full operation in milliseconds.
+Wireless servo controller system built on the **ESP32** using **ESP-NOW**, a wireless, low-latency Wi-Fi protocol that requires no router, no pairing ceremony, and reaches full operation in milliseconds.
 
-Each sender/receiver pair operates independently. Press a button on the sender; the matched receiver reacts instantly across the room.
+Each sender/receiver pair operates independently. When a button is pressed on the sender, the matched receiver reacts instantly.
 
 ---
 
@@ -27,26 +27,25 @@ Each sender/receiver pair operates independently. Press a button on the sender; 
 ## System Overview
 
 ```
-[Sender ESP32] ──── ESP-NOW (2.4 GHz) ────► [Receiver ESP32]
-   (button input)                              (servo / LED output)
+Sender ESP32 -- ESP-NOW --> Receiver ESP32
 ```
 
-- **No router required** — ESP-NOW is peer-to-peer
-- **Sub-10 ms latency** — suitable for live performance
-- **Independent pairs** — each sender is bound to one receiver by MAC address
-- **FreeRTOS** — multi-core tasks keep sweeping servos smooth and non-blocking
+- ESP-NOW is peer-to-peer. This means no router is necessary.
+- Under 10-ms latency, meaning it is highly suitable for live performance.
+- Each sender is bound to a receiver based on the receiver's MAC address.
+- FreeRTOS is used to handle multiple tasks simultaneously at once on an ESP32, using its dual-core processing capabilities.
 
 ---
 
-## Firmware Pairs
+## Pairs
 
 | Pair | Sender | Receiver | Buttons | Actuators |
 |------|--------|----------|---------|-----------|
-| A | `sender_1btn_1door` | `receiver_1btn_1door` | 2 buttons | 2 servos (independent door toggle) |
-| B | `sender_2btn_1door_1meteor` | `receiver_2btn_1door_1meteor` | 2 buttons | Door servo + continuous sweep servo + 2 LEDs |
+| A | `sender_1btn_1door` | `receiver_1btn_1door` | 2 buttons | 2 servos (independent servo toggle) |
+| B | `sender_2btn_1door_1meteor` | `receiver_2btn_1door_1meteor` | 2 buttons | Door servo + continuous sweep servo + 2 LEDs (optional LEDs) |
 | C | `sender_1btn_2doors` | `receiver_1btn_2doors` | 1 button | 2 servos (synchronized door toggle) |
 
-> **Pair B** runs the meteor sweep on a dedicated FreeRTOS task (core 0) so the ESP-NOW callback (core 1) is never blocked.
+> Pair B runs the meteor sweep on a dedicated FreeRTOS task (core 0) so the ESP-NOW callback (core 1) is never blocked.
 
 ---
 
@@ -111,13 +110,14 @@ esp-now-animatronics/
 
 ### Prerequisites
 
-- [PlatformIO](https://platformio.org/) (VS Code extension recommended)  
-  *or* Arduino IDE 2.x with the ESP32 board package installed
-- Two ESP32 development boards per prop
+- The repository is built to work on VSCode (with the Platform IO extension).
+- Two ESP32 development boards per pair.
+- Buttons (1 per transmitter).
+- Servos (2 per receiver).
+- External batteries, depending on the servo voltage intake. When I made this project, I used two 3.2V lithium iron phosphate batteries connected in series (using spot welding to connect them on one side, spot welding individual tabs on the other side for each battery, then soldering wires onto the individual tabs) to power the servos I used.
 
 ### 1 — Find receiver MAC addresses
-
-Flash the `tools/get_mac_address` sketch to each **receiver** board and note the printed MAC address in the Serial Monitor.
+Flash the code on this website: https://randomnerdtutorials.com/get-change-esp32-esp8266-mac-address-arduino/ to get the MAC address. You can find it in the Serial Monitor.
 
 ### 2 — Configure the sender
 
