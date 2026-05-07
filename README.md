@@ -117,7 +117,7 @@ esp-now-animatronics/
 - External batteries, depending on the servo voltage intake. When I made this project, I used two 3.2V lithium iron phosphate batteries connected in series (using spot welding to connect them on one side, spot welding individual tabs on the other side for each battery, then soldering wires onto the individual tabs) to power the servos I used.
 
 ### 1 — Find receiver MAC addresses
-Flash the code on this website: https://randomnerdtutorials.com/get-change-esp32-esp8266-mac-address-arduino/ to get the MAC address. You can find it in the Serial Monitor.
+- Find the corresponding code in the tools foler.
 
 ### 2 — Configure the sender
 
@@ -180,8 +180,6 @@ All sender/receiver pairs import two headers from `shared/`:
 | Tool | Purpose |
 |------|---------|
 | `tools/get_mac_address/` | Arduino sketch — prints the board's MAC address to Serial Monitor |
-| `tools/packet_decoder.py` | Decode raw ESP-NOW packet bytes for debugging |
-| `tools/test_sender.py` | Simulate sender packets over serial for bench testing |
 
 ---
 
