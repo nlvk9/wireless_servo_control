@@ -1,0 +1,40 @@
+name: Firmware Build Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - sender_1btn_1door
+          - sender_2btn_1door_1meteor
+          - sender_1btn_2doors
+          - receiver_1btn_1door
+          - receiver_2btn_1door_1meteor
+          - receiver_1btn_2doors
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build ${{ matrix.target }}
+        run: |
+          cd firmware/${{ matrix.target }}
+          pio run
