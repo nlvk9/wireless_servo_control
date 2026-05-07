@@ -193,4 +193,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE) — © 2025 Your Name
+[MIT](LICENSE) — © 2026 Neel Vinayak
