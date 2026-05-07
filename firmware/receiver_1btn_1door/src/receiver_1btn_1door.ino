@@ -50,7 +50,7 @@ static int lastBtn2 = BTN_NOT_PRESSED;
 /* ── Callbacks ───────────────────────────────────────────────────────────── */
 
 /** Called automatically whenever an ESP-NOW packet arrives. */
-void onDataReceived(const esp_now_recv_info* info, const uint8_t* data, int len) {
+void onDataReceived(const uint8_t* mac, const uint8_t* data, int len) {
 
   memcpy(&inPacket, data, sizeof(inPacket));
 
@@ -94,7 +94,7 @@ void setup() {
     while (true) {}
   }
 
-  esp_now_register_recv_cb((esp_now_recv_cb_t)onDataReceived);
+  esp_now_register_recv_cb(onDataReceived);
 
   Serial.println("[INFO] Receiver ready — waiting for packets.");
 }
